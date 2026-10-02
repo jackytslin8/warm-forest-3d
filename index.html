@@ -192,109 +192,109 @@ function celebrate(){sun.intensity=1.5;setTimeout(()=>sun.intensity=.9,1500);tre
 function fireworks3D(){const cols=[0xFF6F00,0xFFD54F,0x66BB6A,0x42A5F5,0xBA68C8];for(let b=0;b<3;b++){setTimeout(()=>{const geo=new THREE.BufferGeometry(),n=180,pt=new Float32Array(n*3),vels=[];for(let i=0;i<n;i++){pt[i*3]=(Math.random()-.5)*8;pt[i*3+1]=2;pt[i*3+2]=(Math.random()-.5)*8;const a=Math.random()*Math.PI*2,e=Math.random()*Math.PI,sp=3+Math.random()*5;vels.push([Math.cos(a)*Math.sin(e)*sp,Math.cos(e)*sp+3,Math.sin(a)*Math.sin(e)*sp]);}geo.setAttribute("position",new THREE.BufferAttribute(pt,3));const mat=new THREE.PointsMaterial({color:cols[b%cols.length],size:.5,transparent:true,opacity:1});const fw=new THREE.Points(geo,mat);scene.add(fw);let life=0;const iv=setInterval(()=>{life+=16;const arr=geo.attributes.position.array;for(let i=0;i<n;i++){arr[i*3]+=vels[i][0]*.016;arr[i*3+1]+=vels[i][1]*.016;arr[i*3+2]+=vels[i][2]*.016;vels[i][1]-=9.8*.016;}mat.opacity=Math.max(0,1-life/2500);geo.attributes.position.needsUpdate=true;if(life>2600){clearInterval(iv);scene.remove(fw);geo.dispose();mat.dispose();}},16);},b*400);}}
 /* ==================== 關卡資料 ==================== */
 const STATIONS=[
-  {id:0,name:"暖陽小徑",topic:"等值分數・擴分約分",emoji:"🐿️",animal:"松鼠奶奶",gift:"松果標本"},
-  {id:1,name:"蘑菇森林",topic:"分數的加減",emoji:"🐰",animal:"小兔子",gift:"胡蘿蔔餅乾"},
-  {id:2,name:"星光溪谷",topic:"小數的加減乘",emoji:"🐻",animal:"小熊",gift:"蜂蜜罐"},
-  {id:3,name:"紅楓坡",topic:"因數・倍數",emoji:"🦔",animal:"小刺蝟",gift:"楓葉書籤"},
-  {id:4,name:"彩虹草原",topic:"面積計算",emoji:"🦌",animal:"梅花鹿",gift:"彩虹花束"},
-  {id:5,name:"雲朵樹屋",topic:"體積計算",emoji:"🦉",animal:"小貓頭鷹",gift:"星光羽毛"},
-  {id:6,name:"陽光市集",topic:"百分率・折扣",emoji:"🐦",animal:"小麻雀",gift:"幸運種子"},
+  {id:0,name:"暖陽小徑",topic:"等值分數・擴約分（五上）",emoji:"🐿️",animal:"松鼠奶奶",gift:"松果標本"},
+  {id:1,name:"蘑菇森林",topic:"分數加減・公分母（五上）",emoji:"🐰",animal:"小兔子",gift:"胡蘿蔔餅乾"},
+  {id:2,name:"星光溪谷",topic:"小數的乘法（五下）",emoji:"🐻",animal:"小熊",gift:"蜂蜜罐"},
+  {id:3,name:"紅楓坡",topic:"倍數因數・公倍數公因數（五上）",emoji:"🦔",animal:"小刺蝟",gift:"楓葉書籤"},
+  {id:4,name:"彩虹草原",topic:"平面圖形面積（五上）",emoji:"🦌",animal:"梅花鹿",gift:"彩虹花束"},
+  {id:5,name:"雲朵樹屋",topic:"體積・容積（五下）",emoji:"🦉",animal:"小貓頭鷹",gift:"星光羽毛"},
+  {id:6,name:"陽光市集",topic:"比率與百分率（五下）",emoji:"🐦",animal:"小麻雀",gift:"幸運種子"},
 ];
 const DIFFS=["基礎","標準","進階"];
 const DIFF_MULT={"基礎":.6,"標準":1,"進階":1.5};
 /* ==================== 出題引擎 ==================== */
-/* ==================== 題庫：每個主題 10 題（共 7 主題・70 題），同場抽 3 題不重複 ==================== */
+/* ==================== 題庫：翰林版五年級（每主題 10 題・共 70 題），同場抽 3 題不重複 ==================== */
 const QPOOL=[
-/* 🐿️ 暖陽小徑・等值分數（擴分・約分） */
+/* 🐿️ 暖陽小徑・等值分數：擴分與約分（五上・擴、約分與加減） */
 [
- {type:"frac",diff:"基礎",question:"把「二分之一」擴分，分母變成 4，分子是多少？",qTex:"1/2 = ?/4",ansNum:2,ansDen:4,verify:"2/4 約分（分子分母同除以 2）= 1/2 ✓",hint:"擴分：分子分母同乘 2 → 2 × 2 = 4"},
- {type:"frac",diff:"基礎",question:"把「三分之一」擴分，分母變成 6，分子是多少？",qTex:"1/3 = ?/6",ansNum:2,ansDen:6,verify:"2/6 約分（同除以 2）= 1/3 ✓",hint:"分母 3 → 6 乘 2，分子也乘 2 → 1 × 2 = 2"},
- {type:"frac",diff:"基礎",question:"把「五分之二」擴分，分母變成 10，分子是多少？",qTex:"2/5 = ?/10",ansNum:4,ansDen:10,verify:"4/10 約分（同除以 2）= 2/5 ✓",hint:"擴分：分子分母同乘 2 → 2 × 2 = 4"},
- {type:"frac",diff:"基礎",question:"把「八分之四」約成最簡分數。",qTex:"4/8 = ?/?",ansNum:1,ansDen:2,verify:"1/2 擴分（同乘 4）= 4/8 ✓",hint:"約分：分子分母同除以 4 → 4÷4=1、8÷4=2"},
- {type:"frac",diff:"標準",question:"把「四分之三」擴分，分母變成 12，分子是多少？",qTex:"3/4 = ?/12",ansNum:9,ansDen:12,verify:"9/12 約分（同除以 3）= 3/4 ✓",hint:"分母 4 → 12 乘 3，分子也乘 3 → 3 × 3 = 9"},
- {type:"frac",diff:"標準",question:"把「八分之六」約成最簡分數。",qTex:"6/8 = ?/?",ansNum:3,ansDen:4,verify:"3/4 擴分（同乘 2）= 6/8 ✓",hint:"約分：分子分母同除以 2 → 6÷2=3、8÷2=4"},
- {type:"frac",diff:"標準",question:"把「四分之一」擴分，分母變成 12，分子是多少？",qTex:"1/4 = ?/12",ansNum:3,ansDen:12,verify:"3/12 約分（同除以 3）= 1/4 ✓",hint:"分母 4 → 12 乘 3，分子也乘 3 → 1 × 3 = 3"},
- {type:"frac",diff:"進階",question:"把「二十四分之十八」約成最簡分數。",qTex:"18/24 = ?/?",ansNum:3,ansDen:4,verify:"3/4：3×6=18、4×6=24 ✓",hint:"分子分母同除以最大公因數 6 → 18÷6=3、24÷6=4"},
- {type:"frac",diff:"進階",question:"把「九分之二」擴分，分母變成 36，分子是多少？",qTex:"2/9 = ?/36",ansNum:8,ansDen:36,verify:"8/36 約分（同除以 4）= 2/9 ✓",hint:"分母 9 → 36 乘 4，分子也乘 4 → 2 × 4 = 8"},
- {type:"frac",diff:"進階",question:"把「三十六分之二十四」約成最簡分數。",qTex:"24/36 = ?/?",ansNum:2,ansDen:3,verify:"2/3：2×12=24、3×12=36 ✓",hint:"分子分母同除以 12 → 24÷12=2、36÷12=3"},
+ {type:"frac",diff:"基礎",question:"把 1/2 擴分，使分母變成 4，分子應為幾？",qTex:"1/2 = ?/4",ansNum:2,ansDen:4,verify:"2/4 約分（同除以 2）= 1/2 ✓",hint:"擴分：分子分母同乘 2 → 1×2=2、2×2=4"},
+ {type:"frac",diff:"基礎",question:"把 2/5 擴分，使分母變成 10，分子應為幾？",qTex:"2/5 = ?/10",ansNum:4,ansDen:10,verify:"4/10 約分（同除以 2）= 2/5 ✓",hint:"擴分：分子分母同乘 2 → 2×2=4、5×2=10"},
+ {type:"frac",diff:"基礎",question:"把 1/3 擴分，使分母變成 9，分子應為幾？",qTex:"1/3 = ?/9",ansNum:3,ansDen:9,verify:"3/9 約分（同除以 3）= 1/3 ✓",hint:"擴分：分子分母同乘 3 → 1×3=3、3×3=9"},
+ {type:"frac",diff:"基礎",question:"把 4/8 約成最簡分數。",qTex:"4/8 = ?/?",ansNum:1,ansDen:2,verify:"1/2 擴分（同乘 4）= 4/8 ✓",hint:"約分：分子分母同除以 4 → 4÷4=1、8÷4=2"},
+ {type:"frac",diff:"標準",question:"把 3/4 擴分，使分母變成 12，分子應為幾？",qTex:"3/4 = ?/12",ansNum:9,ansDen:12,verify:"9/12 約分（同除以 3）= 3/4 ✓",hint:"分母 4→12 乘 3，分子也乘 3 → 3×3=9"},
+ {type:"frac",diff:"標準",question:"把 1/4 擴分，使分母變成 12，分子應為幾？",qTex:"1/4 = ?/12",ansNum:3,ansDen:12,verify:"3/12 約分（同除以 3）= 1/4 ✓",hint:"分母 4→12 乘 3，分子也乘 3 → 1×3=3"},
+ {type:"frac",diff:"標準",question:"把 6/8 約成最簡分數。",qTex:"6/8 = ?/?",ansNum:3,ansDen:4,verify:"3/4 擴分（同乘 2）= 6/8 ✓",hint:"約分：分子分母同除以 2 → 6÷2=3、8÷2=4"},
+ {type:"frac",diff:"進階",question:"把 2/3 擴分，使分母變成 15，分子應為幾？",qTex:"2/3 = ?/15",ansNum:10,ansDen:15,verify:"10/15 約分（同除以 5）= 2/3 ✓",hint:"分母 3→15 乘 5，分子也乘 5 → 2×5=10"},
+ {type:"frac",diff:"進階",question:"把 18/24 約成最簡分數。",qTex:"18/24 = ?/?",ansNum:3,ansDen:4,verify:"3/4：3×6=18、4×6=24 ✓",hint:"找分子分母的最大公因數 6：18÷6=3、24÷6=4"},
+ {type:"frac",diff:"進階",question:"把 24/36 約成最簡分數。",qTex:"24/36 = ?/?",ansNum:2,ansDen:3,verify:"2/3：2×12=24、3×12=36 ✓",hint:"找分子分母的最大公因數 12：24÷12=2、36÷12=3"},
 ],
-/* 🐰 蘑菇森林・分數的加減 */
+/* 🐰 蘑菇森林・分數的加減（五上・擴、約分與加減） */
 [
- {type:"frac",diff:"基礎",question:"「五分之一」加「五分之二」等於幾分之幾？",qTex:"1/5 + 2/5 = ?/?",ansNum:3,ansDen:5,verify:"驗算：3/5 − 1/5 = 2/5 ✓",hint:"同分母：分母不變，分子相加 → 1+2=3"},
- {type:"frac",diff:"基礎",question:"「七分之三」減「七分之一」等於幾分之幾？",qTex:"3/7 − 1/7 = ?/?",ansNum:2,ansDen:7,verify:"驗算：2/7 + 1/7 = 3/7 ✓",hint:"同分母：分母不變，分子相減 → 3−1=2"},
- {type:"frac",diff:"基礎",question:"「九分之二」加「九分之四」等於幾分之幾？",qTex:"2/9 + 4/9 = ?/?",ansNum:6,ansDen:9,verify:"驗算：6/9 − 2/9 = 4/9 ✓",hint:"同分母：分母不變，分子相加 → 2+4=6"},
- {type:"frac",diff:"基礎",question:"「八分之五」減「八分之三」等於幾分之幾？",qTex:"5/8 − 3/8 = ?/?",ansNum:2,ansDen:8,verify:"驗算：2/8 + 3/8 = 5/8 ✓",hint:"同分母：分母不變，分子相減 → 5−3=2"},
- {type:"frac",diff:"標準",question:"「十分之三」加「十分之四」等於幾分之幾？",qTex:"3/10 + 4/10 = ?/?",ansNum:7,ansDen:10,verify:"驗算：7/10 − 3/10 = 4/10 ✓",hint:"同分母：分子相加 → 3+4=7"},
- {type:"frac",diff:"標準",question:"「七分之六」減「七分之二」等於幾分之幾？",qTex:"6/7 − 2/7 = ?/?",ansNum:4,ansDen:7,verify:"驗算：4/7 + 2/7 = 6/7 ✓",hint:"同分母：分子相減 → 6−2=4"},
- {type:"frac",diff:"標準",question:"「六分之一」加「六分之二」等於幾分之幾？",qTex:"1/6 + 2/6 = ?/?",ansNum:3,ansDen:6,verify:"驗算：3/6 − 1/6 = 2/6 ✓",hint:"同分母：分子相加 → 1+2=3"},
- {type:"frac",diff:"進階",question:"「二分之一」加「四分之一」等於幾分之幾？（通分）",qTex:"1/2 + 1/4 = ?/?",ansNum:3,ansDen:4,verify:"驗算：3/4 − 1/4 = 2/4 = 1/2 ✓",hint:"通分：1/2 = 2/4，2/4 + 1/4 = 3/4"},
- {type:"frac",diff:"進階",question:"「六分之五」減「四分之一」等於幾分之幾？（通分）",qTex:"5/6 − 1/4 = ?/?",ansNum:7,ansDen:12,verify:"驗算：7/12 + 3/12 = 10/12 = 5/6 ✓",hint:"通分母 12：5/6 = 10/12、1/4 = 3/12 → 10−3=7"},
- {type:"frac",diff:"進階",question:"「三分之二」加「六分之一」等於幾分之幾？（通分）",qTex:"2/3 + 1/6 = ?/?",ansNum:5,ansDen:6,verify:"驗算：5/6 − 1/6 = 4/6 = 2/3 ✓",hint:"通分母 6：2/3 = 4/6，4/6 + 1/6 = 5/6"},
+ {type:"frac",diff:"基礎",question:"「五分之一」加「五分之二」等於幾分之幾？",qTex:"1/5 + 2/5 = ?/?",ansNum:3,ansDen:5,verify:"驗算：3/5 − 1/5 = 2/5 ✓",hint:"同分母加減：分母不變，分子相加 → 1+2=3"},
+ {type:"frac",diff:"基礎",question:"「七分之三」減「七分之一」等於幾分之幾？",qTex:"3/7 − 1/7 = ?/?",ansNum:2,ansDen:7,verify:"驗算：2/7 + 1/7 = 3/7 ✓",hint:"同分母加減：分母不變，分子相減 → 3−1=2"},
+ {type:"frac",diff:"基礎",question:"「九分之二」加「九分之四」等於幾分之幾？",qTex:"2/9 + 4/9 = ?/?",ansNum:6,ansDen:9,verify:"驗算：6/9 − 2/9 = 4/9 ✓",hint:"同分母加減：分母不變，分子相加 → 2+4=6"},
+ {type:"frac",diff:"基礎",question:"「八分之五」減「八分之三」等於幾分之幾？",qTex:"5/8 − 3/8 = ?/?",ansNum:2,ansDen:8,verify:"驗算：2/8 + 3/8 = 5/8 ✓",hint:"同分母加減：分母不變，分子相減 → 5−3=2"},
+ {type:"frac",diff:"標準",question:"「十分之三」加「十分之四」等於幾分之幾？",qTex:"3/10 + 4/10 = ?/?",ansNum:7,ansDen:10,verify:"驗算：7/10 − 3/10 = 4/10 ✓",hint:"同分母加減：分子相加 → 3+4=7"},
+ {type:"frac",diff:"標準",question:"「七分之六」減「七分之二」等於幾分之幾？",qTex:"6/7 − 2/7 = ?/?",ansNum:4,ansDen:7,verify:"驗算：4/7 + 2/7 = 6/7 ✓",hint:"同分母加減：分子相減 → 6−2=4"},
+ {type:"frac",diff:"標準",question:"「六分之一」加「六分之二」等於幾分之幾？",qTex:"1/6 + 2/6 = ?/?",ansNum:3,ansDen:6,verify:"驗算：3/6 − 1/6 = 2/6 ✓",hint:"同分母加減：分子相加 → 1+2=3"},
+ {type:"frac",diff:"進階",question:"「十二分之九」減「十二分之五」等於幾分之幾？",qTex:"9/12 − 5/12 = ?/?",ansNum:4,ansDen:12,verify:"驗算：4/12 + 5/12 = 9/12 ✓",hint:"同分母加減：分子相減 → 9−5=4"},
+ {type:"frac",diff:"進階",question:"「二分之一」加「四分之一」等於幾分之幾？（嘗試錯誤找公分母）",qTex:"1/2 + 1/4 = ?/?",ansNum:3,ansDen:4,verify:"驗算：3/4 − 1/4 = 2/4 = 1/2 ✓",hint:"嘗試錯誤：2 和 4 的公倍數 4 → 1/2 = 2/4，2/4 + 1/4 = 3/4"},
+ {type:"frac",diff:"進階",question:"「六分之五」減「四分之一」等於幾分之幾？（嘗試錯誤找公分母）",qTex:"5/6 − 1/4 = ?/?",ansNum:7,ansDen:12,verify:"驗算：7/12 + 3/12 = 10/12 = 5/6 ✓",hint:"嘗試錯誤：6 和 4 的公倍數 12 → 5/6=10/12、1/4=3/12"},
 ],
-/* 🐻 星光溪谷・小數的加減乘 */
+/* 🐻 星光溪谷・小數的乘法（五下・小數） */
 [
- {type:"num",diff:"基礎",question:"0.5 + 0.3 = ?",qTex:"0.5 + 0.3 = ?",ans:0.8,verify:"驗算：0.8 − 0.5 = 0.3 ✓",hint:"小數點對齊，從右往左算"},
- {type:"num",diff:"基礎",question:"0.9 − 0.4 = ?",qTex:"0.9 − 0.4 = ?",ans:0.5,verify:"驗算：0.5 + 0.4 = 0.9 ✓",hint:"小數點對齊，從右往左算"},
- {type:"num",diff:"基礎",question:"0.7 × 3 = ?",qTex:"0.7 × 3 = ?",ans:2.1,verify:"驗算：2.1 ÷ 3 = 0.7 ✓",hint:"先當整數算 7 × 3 = 21，再點小數點一位"},
- {type:"num",diff:"基礎",question:"0.6 + 0.6 = ?",qTex:"0.6 + 0.6 = ?",ans:1.2,verify:"驗算：1.2 − 0.6 = 0.6 ✓",hint:"0.6 × 2 = 1.2"},
- {type:"num",diff:"標準",question:"2.45 + 1.8 = ?",qTex:"2.45 + 1.8 = ?",ans:4.25,verify:"驗算：4.25 − 2.45 = 1.8 ✓",hint:"小數點對齊：把 1.8 看成 1.80"},
- {type:"num",diff:"標準",question:"5.6 − 2.85 = ?",qTex:"5.6 − 2.85 = ?",ans:2.75,verify:"驗算：2.75 + 2.85 = 5.6 ✓",hint:"小數點對齊：把 5.6 看成 5.60"},
+ {type:"num",diff:"基礎",question:"0.3 × 4 = ?",qTex:"0.3 × 4 = ?",ans:1.2,verify:"驗算：1.2 ÷ 4 = 0.3 ✓",hint:"先算 3×4=12，再點小數點一位 → 1.2"},
+ {type:"num",diff:"基礎",question:"0.5 × 6 = ?",qTex:"0.5 × 6 = ?",ans:3,verify:"驗算：3 ÷ 6 = 0.5 ✓",hint:"0.5 就是一半：6 ÷ 2 = 3"},
+ {type:"num",diff:"基礎",question:"0.2 × 5 = ?",qTex:"0.2 × 5 = ?",ans:1,verify:"驗算：1 ÷ 5 = 0.2 ✓",hint:"先算 2×5=10，再點小數點一位 → 1.0"},
+ {type:"num",diff:"基礎",question:"1.2 × 3 = ?",qTex:"1.2 × 3 = ?",ans:3.6,verify:"驗算：3.6 ÷ 3 = 1.2 ✓",hint:"先算 12×3=36，再點小數點一位 → 3.6"},
  {type:"num",diff:"標準",question:"0.25 × 4 = ?",qTex:"0.25 × 4 = ?",ans:1,verify:"驗算：1 ÷ 4 = 0.25 ✓",hint:"0.25 × 2 = 0.5，再 × 2 = 1"},
- {type:"num",diff:"進階",question:"3.75 + 2.6 + 1.85 一共等於多少？",qTex:"3.75 + 2.6 + 1.85 = ?",ans:8.2,verify:"驗算：3.75 + 1.85 = 5.6，5.6 + 2.6 = 8.2 ✓",hint:"先算 3.75 + 1.85 = 5.6，再加 2.6"},
- {type:"num",diff:"進階",question:"一條毛線 10.5 公尺，剪掉 3.75 公尺，再剪掉 2.4 公尺，還剩幾公尺？",qTex:"10.5 − 3.75 − 2.4 = ?",ans:4.35,verify:"驗算：4.35 + 2.4 + 3.75 = 10.5 ✓",hint:"10.5 − 3.75 = 6.75，再減 2.4 = 4.35"},
+ {type:"num",diff:"標準",question:"2.4 × 5 = ?",qTex:"2.4 × 5 = ?",ans:12,verify:"驗算：12 ÷ 5 = 2.4 ✓",hint:"先算 24×5=120，再點小數點一位 → 12.0"},
+ {type:"num",diff:"標準",question:"1.5 × 3.2 = ?",qTex:"1.5 × 3.2 = ?",ans:4.8,verify:"驗算：4.8 ÷ 1.5 = 3.2 ✓",hint:"先算 15×32=480，兩個數共兩位小數 → 4.80"},
+ {type:"num",diff:"進階",question:"2.35 × 4 = ?",qTex:"2.35 × 4 = ?",ans:9.4,verify:"驗算：9.4 ÷ 4 = 2.35 ✓",hint:"先算 235×4=940，再點兩位小數 → 9.40"},
  {type:"num",diff:"進階",question:"1.25 × 8 = ?",qTex:"1.25 × 8 = ?",ans:10,verify:"驗算：10 ÷ 8 = 1.25 ✓",hint:"1.25 × 8 = 1.25 × 4 × 2 = 5 × 2 = 10"},
+ {type:"num",diff:"進階",question:"一瓶醬油 3.75 元，6 瓶共幾元？",qTex:"3.75 × 6 = ?",ans:22.5,verify:"驗算：22.5 ÷ 6 = 3.75 ✓",hint:"先算 375×6=2250，再點兩位小數 → 22.50"},
 ],
-/* 🦔 紅楓坡・因數・倍數 */
+/* 🦔 紅楓坡・倍數與因數・公倍數公因數（五上・倍數與因數／公倍數與公因數） */
 [
- {type:"choice",diff:"基礎",question:"下列哪些是 12 的因數？（選全部正確）",qTex:"12 的因數",options:["1","2","3","4","6","12"],ans:["1","2","3","4","6","12"],multi:true,verify:"12 = 1×12 = 2×6 = 3×4 ✓",hint:"因數：能整除 12 的數，一對一對找"},
- {type:"choice",diff:"基礎",question:"下列哪些是 8 的因數？（選全部正確）",qTex:"8 的因數",options:["1","2","4","8"],ans:["1","2","4","8"],multi:true,verify:"8 = 1×8 = 2×4 ✓",hint:"因數：能整除 8 的數"},
- {type:"num",diff:"基礎",question:"6 的第 3 個倍數是多少？",qTex:"6 × 3 = ?",ans:18,verify:"驗算：18 ÷ 6 = 3 ✓",hint:"倍數：6 × 3"},
+ {type:"choice",diff:"基礎",question:"下列哪些是 12 的因數？（選全部正確）",qTex:"12 的因數",options:["1","2","3","4","6","12"],ans:["1","2","3","4","6","12"],multi:true,verify:"12 = 1×12 = 2×6 = 3×4 ✓",hint:"因數：能整除 12 的數，一對一對找：1×12、2×6、3×4"},
+ {type:"choice",diff:"基礎",question:"下列哪些是 8 的因數？（選全部正確）",qTex:"8 的因數",options:["1","2","4","8"],ans:["1","2","4","8"],multi:true,verify:"8 = 1×8 = 2×4 ✓",hint:"因數：能整除 8 的數，一對一對找"},
+ {type:"num",diff:"基礎",question:"6 的第 3 個倍數是多少？",qTex:"6 × 3 = ?",ans:18,verify:"驗算：18 ÷ 6 = 3 ✓",hint:"倍數：6×1=6、6×2=12、6×3=18"},
  {type:"num",diff:"基礎",question:"5 的第 4 個倍數是多少？",qTex:"5 × 4 = ?",ans:20,verify:"驗算：20 ÷ 5 = 4 ✓",hint:"5 的倍數：5、10、15、20…"},
- {type:"num",diff:"標準",question:"12 和 18 的最大公因數是多少？",qTex:"12、18 最大公因數 = ?",ans:6,verify:"12 = 2×2×3、18 = 2×3×3，公共：2×3 = 6 ✓",hint:"12 的因數：1,2,3,4,6,12；18 的因數：1,2,3,6,9,18"},
- {type:"num",diff:"標準",question:"4 和 6 的最小公倍數是多少？",qTex:"4、6 最小公倍數 = ?",ans:12,verify:"4 的倍數：4,8,12…；6 的倍數：6,12… ✓",hint:"把兩個數的倍數列出來，找第一個共同出現的"},
+ {type:"num",diff:"標準",question:"12 和 18 的最大公因數是多少？",qTex:"12、18 最大公因數 = ?",ans:6,verify:"12 的因數：1,2,3,4,6,12；18 的因數：1,2,3,6,9,18，最大共同是 6 ✓",hint:"把兩個數的因數都列出來，找最大的共同因數"},
+ {type:"num",diff:"標準",question:"4 和 6 的最小公倍數是多少？",qTex:"4、6 最小公倍數 = ?",ans:12,verify:"4 的倍數：4,8,12…；6 的倍數：6,12…，最小共同是 12 ✓",hint:"把兩個數的倍數都列出來，找最小共同倍數"},
  {type:"choice",diff:"標準",question:"下列哪些是 6 的倍數？（選全部正確）",qTex:"6 的倍數",options:["6","12","15","18","24"],ans:["6","12","18","24"],multi:true,verify:"6、12、18、24 都能被 6 整除；15 不行 ✓",hint:"6 的倍數：6、12、18、24、30…"},
- {type:"num",diff:"進階",question:"24 和 36 的最大公因數是多少？",qTex:"24、36 最大公因數 = ?",ans:12,verify:"24 = 2×2×2×3、36 = 2×2×3×3，公共：2×2×3 = 12 ✓",hint:"24 的因數：…8,12,24；36 的因數：…9,12,18,36"},
- {type:"num",diff:"進階",question:"6 和 8 的最小公倍數是多少？",qTex:"6、8 最小公倍數 = ?",ans:24,verify:"6×4 = 24、8×3 = 24 ✓",hint:"6 的倍數：6,12,18,24；8 的倍數：8,16,24"},
- {type:"choice",diff:"進階",question:"下列哪些是質數？（選全部正確）",qTex:"質數",options:["7","9","11","15","17"],ans:["7","11","17"],multi:true,verify:"9 = 3×3、15 = 3×5 不是質數；7、11、17 是質數 ✓",hint:"質數：只有 1 和自己兩個因數"},
+ {type:"num",diff:"進階",question:"24 和 36 的最大公因數是多少？",qTex:"24、36 最大公因數 = ?",ans:12,verify:"共同因數：1,2,3,4,6,12，最大是 12 ✓",hint:"列 24 的因數：…8,12,24；列 36 的因數：…9,12,18,36；找最大共同"},
+ {type:"num",diff:"進階",question:"6 和 8 的最小公倍數是多少？",qTex:"6、8 最小公倍數 = ?",ans:24,verify:"6×4 = 24、8×3 = 24 ✓",hint:"6 的倍數：6,12,18,24；8 的倍數：8,16,24 → 最小共同 24"},
+ {type:"choice",diff:"進階",question:"下列哪些數能被 3 整除？（選全部正確）",qTex:"能被 3 整除",options:["24","35","48","51","63","70"],ans:["24","48","51","63"],multi:true,verify:"2+4=6、4+8=12、5+1=6、6+3=9，都能被 3 整除 ✓",hint:"3 的整除特性：各位數字相加的和能被 3 整除"},
 ],
-/* 🦌 彩虹草原・面積計算 */
+/* 🦌 彩虹草原・面積（五上・面積／平面圖形） */
 [
  {type:"num",diff:"基礎",question:"長方形草地長 10 公分、寬 5 公分，面積幾平方公分？",qTex:"長10 寬5 長方形 = ?",ans:50,verify:"驗算：50 ÷ 10 = 5 ✓",hint:"長方形面積 = 長 × 寬"},
- {type:"num",diff:"基礎",question:"三角形花圃底 8 公分、高 4 公分，面積幾平方公分？",qTex:"底8 高4 三角形 = ?",ans:16,verify:"驗算：16 × 2 ÷ 8 = 4 ✓",hint:"三角形面積 = 底 × 高 ÷ 2"},
- {type:"num",diff:"基礎",question:"正方形邊長 6 公分，面積幾平方公分？",qTex:"邊長6 正方形 = ?",ans:36,verify:"驗算：6 × 6 = 36 ✓",hint:"正方形面積 = 邊長 × 邊長"},
- {type:"num",diff:"基礎",question:"長方形草地長 7 公分、寬 6 公分，面積幾平方公分？",qTex:"長7 寬6 長方形 = ?",ans:42,verify:"驗算：42 ÷ 7 = 6 ✓",hint:"長方形面積 = 長 × 寬"},
- {type:"num",diff:"標準",question:"三角形花圃底 10 公分、高 8 公分，面積幾平方公分？",qTex:"底10 高8 三角形 = ?",ans:40,verify:"驗算：40 × 2 ÷ 10 = 8 ✓",hint:"三角形面積 = 底 × 高 ÷ 2"},
+ {type:"num",diff:"基礎",question:"正方形花圃邊長 6 公分，面積幾平方公分？",qTex:"邊長6 正方形 = ?",ans:36,verify:"驗算：6 × 6 = 36 ✓",hint:"正方形面積 = 邊長 × 邊長"},
+ {type:"num",diff:"基礎",question:"三角形旗子底 8 公分、高 4 公分，面積幾平方公分？",qTex:"底8 高4 三角形 = ?",ans:16,verify:"驗算：16 × 2 ÷ 8 = 4 ✓",hint:"三角形面積 = 底 × 高 ÷ 2"},
+ {type:"num",diff:"基礎",question:"長方形步道長 7 公尺、寬 6 公尺，面積幾平方公尺？",qTex:"長7 寬6 長方形 = ?",ans:42,verify:"驗算：42 ÷ 7 = 6 ✓",hint:"長方形面積 = 長 × 寬"},
  {type:"num",diff:"標準",question:"平行四邊形草地底 9 公分、高 6 公分，面積幾平方公分？",qTex:"底9 高6 平行四邊形 = ?",ans:54,verify:"驗算：54 ÷ 9 = 6 ✓",hint:"平行四邊形面積 = 底 × 高"},
+ {type:"num",diff:"標準",question:"三角形花圃底 10 公分、高 8 公分，面積幾平方公分？",qTex:"底10 高8 三角形 = ?",ans:40,verify:"驗算：40 × 2 ÷ 10 = 8 ✓",hint:"三角形面積 = 底 × 高 ÷ 2"},
  {type:"num",diff:"標準",question:"梯形上底 4、下底 8、高 5 公分，面積幾平方公分？",qTex:"上4 下8 高5 梯形 = ?",ans:30,verify:"驗算：30 × 2 ÷ 5 = 12 = 4+8 ✓",hint:"梯形面積 =（上底 + 下底）× 高 ÷ 2"},
  {type:"num",diff:"進階",question:"梯形上底 6、下底 12、高 8 公分，面積幾平方公分？",qTex:"上6 下12 高8 梯形 = ?",ans:72,verify:"驗算：72 × 2 ÷ 8 = 18 = 6+12 ✓",hint:"(6+12) × 8 ÷ 2 = 18 × 8 ÷ 2 = 72"},
- {type:"num",diff:"進階",question:"平行四邊形草地底 14 公分、高 9 公分，面積幾平方公分？",qTex:"底14 高9 平行四邊形 = ?",ans:126,verify:"驗算：126 ÷ 14 = 9 ✓",hint:"平行四邊形面積 = 底 × 高：14 × 9"},
- {type:"num",diff:"進階",question:"長方形草地長 15 公分、寬 8 公分，面積幾平方公分？",qTex:"長15 寬8 長方形 = ?",ans:120,verify:"驗算：120 ÷ 15 = 8 ✓",hint:"長方形面積 = 長 × 寬：15 × 8"},
+ {type:"num",diff:"進階",question:"平行四邊形草地底 14 公尺、高 9 公尺，面積幾平方公尺？",qTex:"底14 高9 平行四邊形 = ?",ans:126,verify:"驗算：126 ÷ 14 = 9 ✓",hint:"平行四邊形面積 = 底 × 高：14 × 9 = 126"},
+ {type:"num",diff:"進階",question:"長方形花圃長 15 公尺、寬 8 公尺，面積幾平方公尺？",qTex:"長15 寬8 長方形 = ?",ans:120,verify:"驗算：120 ÷ 15 = 8 ✓",hint:"長方形面積 = 長 × 寬：15 × 8 = 120"},
 ],
-/* 🦉 雲朵樹屋・體積計算 */
+/* 🦉 雲朵樹屋・長方體正方體體積・容積（五下・長方體與正方體的體積／容積） */
 [
  {type:"num",diff:"基礎",question:"正方體邊長 2 公分，體積幾立方公分？",qTex:"邊長2 正方體 = ?",ans:8,verify:"驗算：2 × 2 × 2 = 8 ✓",hint:"正方體體積 = 邊長 × 邊長 × 邊長"},
  {type:"num",diff:"基礎",question:"正方體邊長 3 公分，體積幾立方公分？",qTex:"邊長3 正方體 = ?",ans:27,verify:"驗算：3 × 3 × 3 = 27 ✓",hint:"3 × 3 = 9，9 × 3 = 27"},
  {type:"num",diff:"基礎",question:"長方體長 3、寬 2、高 2 公分，體積幾立方公分？",qTex:"長3 寬2 高2 長方體 = ?",ans:12,verify:"驗算：12 ÷ 3 ÷ 2 = 2 ✓",hint:"長方體體積 = 長 × 寬 × 高"},
  {type:"num",diff:"基礎",question:"正方體邊長 4 公分，體積幾立方公分？",qTex:"邊長4 正方體 = ?",ans:64,verify:"驗算：4 × 4 × 4 = 64 ✓",hint:"4 × 4 = 16，16 × 4 = 64"},
- {type:"num",diff:"標準",question:"長方體長 5、寬 3、高 4 公分，體積幾立方公分？",qTex:"長5 寬3 高4 長方體 = ?",ans:60,verify:"驗算：60 ÷ 5 ÷ 3 = 4 ✓",hint:"5 × 3 × 4 = 60"},
+ {type:"num",diff:"標準",question:"長方體長 5、寬 3、高 4 公分，體積幾立方公分？",qTex:"長5 寬3 高4 長方體 = ?",ans:60,verify:"驗算：60 ÷ 5 ÷ 3 = 4 ✓",hint:"長 × 寬 × 高 = 5 × 3 × 4 = 60"},
  {type:"num",diff:"標準",question:"正方體邊長 5 公分，體積幾立方公分？",qTex:"邊長5 正方體 = ?",ans:125,verify:"驗算：5 × 5 × 5 = 125 ✓",hint:"5 × 5 = 25，25 × 5 = 125"},
- {type:"num",diff:"標準",question:"長方體長 7、寬 3、高 2 公分，體積幾立方公分？",qTex:"長7 寬3 高2 長方體 = ?",ans:42,verify:"驗算：42 ÷ 7 ÷ 3 = 2 ✓",hint:"7 × 3 × 2 = 42"},
- {type:"num",diff:"進階",question:"長方體長 8、寬 6、高 5 公分，體積幾立方公分？",qTex:"長8 寬6 高5 長方體 = ?",ans:240,verify:"驗算：240 ÷ 8 ÷ 6 = 5 ✓",hint:"8 × 6 = 48，48 × 5 = 240"},
- {type:"num",diff:"進階",question:"長方體長 9、寬 7、高 4 公分，體積幾立方公分？",qTex:"長9 寬7 高4 長方體 = ?",ans:252,verify:"驗算：252 ÷ 9 ÷ 7 = 4 ✓",hint:"9 × 7 = 63，63 × 4 = 252"},
- {type:"num",diff:"進階",question:"正方體邊長 6 公分，體積幾立方公分？",qTex:"邊長6 正方體 = ?",ans:216,verify:"驗算：6 × 6 × 6 = 216 ✓",hint:"6 × 6 = 36，36 × 6 = 216"},
+ {type:"num",diff:"標準",question:"1 公升（L）等於幾毫升（mL）？",qTex:"1 L = ? mL",ans:1000,verify:"驗算：1000 mL ÷ 1000 = 1 L ✓",hint:"容積換算：1 L = 1000 mL"},
+ {type:"num",diff:"進階",question:"長方體長 8、寬 6、高 5 公分，體積幾立方公分？",qTex:"長8 寬6 高5 長方體 = ?",ans:240,verify:"驗算：240 ÷ 8 ÷ 6 = 5 ✓",hint:"8 × 6 × 5：先算 8×6=48，再 ×5 = 240"},
+ {type:"num",diff:"進階",question:"2 公升的牛奶可以裝滿幾個 250 mL 的紙盒？",qTex:"2000 ÷ 250 = ?",ans:8,verify:"驗算：250 × 8 = 2000 mL = 2 L ✓",hint:"先換單位：2 L = 2000 mL，再 ÷ 250"},
+ {type:"num",diff:"進階",question:"把兩個邊長 2 公分相同的正方體上下疊放，組成的立體體積幾立方公分？",qTex:"2 × (2×2×2) = ?",ans:16,verify:"驗算：每個 8，8 + 8 = 16 ✓",hint:"每個正方體 2×2×2 = 8，兩個：8 × 2 = 16"},
 ],
-/* 🐦 陽光市集・百分率・折扣 */
+/* 🐦 陽光市集・百分率・折扣（五下・比率與百分率） */
 [
- {type:"num",diff:"基礎",question:"80 的 50% 是多少？",qTex:"80 × 50% = ?",ans:40,verify:"驗算：40 ÷ 80 = 50% ✓",hint:"50% 就是一直的一半：80 ÷ 2 = 40"},
+ {type:"num",diff:"基礎",question:"80 的 50% 是多少？",qTex:"80 × 50% = ?",ans:40,verify:"驗算：40 ÷ 80 = 50% ✓",hint:"50% 就是一半：80 ÷ 2 = 40"},
  {type:"num",diff:"基礎",question:"200 的 10% 是多少？",qTex:"200 × 10% = ?",ans:20,verify:"驗算：20 ÷ 200 = 10% ✓",hint:"10% 就是除以 10：200 ÷ 10 = 20"},
- {type:"num",diff:"基礎",question:"一件 200 元的毛衣打八折（80%）賣，售價幾元？",qTex:"200 元打八折 = ?",ans:160,verify:"驗算：200 − 160 = 40 = 200 × 20% ✓",hint:"八折 = 收 80%：200 × 0.8 = 160"},
  {type:"num",diff:"基礎",question:"60 的 25% 是多少？",qTex:"60 × 25% = ?",ans:15,verify:"驗算：15 ÷ 60 = 25% ✓",hint:"25% 就是四分之一：60 ÷ 4 = 15"},
- {type:"num",diff:"標準",question:"森林商店一件毛衣 400 元，打八折（80%）賣，售價幾元？",qTex:"400 元打八折 = ?",ans:320,verify:"驗算：400 × 0.8 = 320 ✓",hint:"八折 = 收 80%"},
+ {type:"num",diff:"基礎",question:"一件 300 元的運動衣打九折出售，便宜了多少元？",qTex:"300 × 10% = ?",ans:30,verify:"驗算：九折 = 便宜 10%：300 × 0.1 = 30 ✓",hint:"九折 = 九成的價格，也就是便宜 10%"},
  {type:"num",diff:"標準",question:"150 的 30% 是多少？",qTex:"150 × 30% = ?",ans:45,verify:"驗算：45 ÷ 150 = 30% ✓",hint:"150 × 0.3 = 45"},
- {type:"num",diff:"標準",question:"一件 500 元的外套打九折（90%）賣，售價幾元？",qTex:"500 元打九折 = ?",ans:450,verify:"驗算：500 × 0.9 = 450 ✓",hint:"九折 = 收 90%：500 × 0.9"},
- {type:"num",diff:"進階",question:"森林商店一件外套 500 元，先打九折（90%），再用折價券再扣 50 元，最後幾元？",qTex:"500 × 0.9 − 50 = ?",ans:400,verify:"驗算：500 × 0.9 = 450，450 − 50 = 400 ✓",hint:"先算折價 450 元，再減折價券 50 元"},
- {type:"num",diff:"進階",question:"一個 600 元的玩具打七五折（75%）賣，便宜了多少元？",qTex:"600 × 25% = ?",ans:150,verify:"驗算：600 − 150 = 450 = 600 × 75% ✓",hint:"便宜的部分 = 原價 × 25%：600 ÷ 4 = 150"},
- {type:"num",diff:"進階",question:"240 元是一個數的 40%，這個數是多少？",qTex:"40% × ? = 240",ans:600,verify:"驗算：600 × 0.4 = 240 ✓",hint:"已知部分求原價：240 ÷ 0.4 = 600"},
+ {type:"num",diff:"標準",question:"森林商店一件 400 元的毛衣打八折出售，售價幾元？",qTex:"400 × 80% = ?",ans:320,verify:"驗算：400 × 0.8 = 320 ✓",hint:"八折 = 收 80% 的價格：400 × 0.8"},
+ {type:"num",diff:"標準",question:"一件 500 元的外套打九折出售，售價幾元？",qTex:"500 × 90% = ?",ans:450,verify:"驗算：500 × 0.9 = 450 ✓",hint:"九折 = 收 90% 的價格：500 × 0.9"},
+ {type:"num",diff:"進階",question:"一件 500 元的外套先打九折，再用折價券扣 50 元，最後幾元？",qTex:"500 × 90% − 50 = ?",ans:400,verify:"驗算：500 × 0.9 = 450，450 − 50 = 400 ✓",hint:"先算折價後的 450 元，再減 50 元"},
+ {type:"num",diff:"進階",question:"一個 600 元的玩具打七五折出售，比原價便宜幾元？",qTex:"600 × 25% = ?",ans:150,verify:"驗算：七五折便宜 25%：600 × 0.25 = 150 ✓",hint:"七五折 = 便宜 25%：600 ÷ 4 = 150"},
+ {type:"num",diff:"進階",question:"240 元是一個商品原價的 40%，原價是多少元？",qTex:"40% × ? = 240",ans:600,verify:"驗算：600 × 0.4 = 240 ✓",hint:"已知部分求整體：240 ÷ 0.4 = 600"},
 ]
 ];
 /* 抽題：同難度優先、排除已抽過的題，確保同場不重複 */
