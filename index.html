@@ -313,8 +313,8 @@ function StationMap({progress,diff,setDiff,onSelect,onHome,onOpenMem,memCount}){
       STATIONS.map(st=>{
         const done=progress[st.id]>=3;
         const cur=!done&&(st.id===0||progress[st.id-1]>=3||progress[st.id]>0);
-        const locked=!done&&!cur;
-        const cls="station-card "+(done?"done":cur?"current":"locked");
+        const locked=false; // 全部關卡開放，不鎖住
+        const cls="station-card "+(done?"done":cur?"current":"available");
         return h("div",{key:st.id,className:cls,onClick:()=>{
           if(locked){SFX.wrong();return;}
           SFX.click();onSelect(st.id);
