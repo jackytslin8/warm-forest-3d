@@ -109,12 +109,20 @@
 
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-<script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
-<script>
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
 /* ==================== Three.js 背景場景 ==================== */
-let scene,camera,renderer,controls,trees=[],sun;
-function initBG(){
+let scene,camera,renderer,controls,trees=[],sun;function initBG(){
   scene=new THREE.Scene();
   scene.fog=new THREE.Fog(0xB5EAD7,30,90);
   camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,200);
@@ -123,7 +131,7 @@ function initBG(){
   renderer.setSize(innerWidth,innerHeight);
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
   renderer.shadowMap.enabled=true;
-  controls=new THREE.OrbitControls(camera,renderer.domElement);
+  controls=new OrbitControls(camera,renderer.domElement);
   controls.enableDamping=true;controls.dampingFactor=.05;
   controls.maxPolarAngle=Math.PI*.48;
   controls.minDistance=15;controls.maxDistance=50;
