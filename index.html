@@ -15,23 +15,37 @@
   .card{
     background:rgba(255,255,255,.94);border-radius:20px;padding:22px 26px;
     box-shadow:0 10px 36px rgba(46,125,50,.3);max-width:520px;width:100%;
-    text-align:center;
+    text-align:center;animation:cardIn .4s cubic-bezier(.34,1.56,.64,1);
   }
+  @keyframes cardIn{0%{opacity:0;transform:scale(.85) translateY(20px);}100%{opacity:1;transform:scale(1);}}
+
   h1{font-size:1.4rem;color:#2E7D32;margin-bottom:2px;}
   .sub{font-size:.8rem;color:#66BB6A;margin-bottom:12px;}
 
   /* 進度條 */
   .prog-row{display:flex;gap:6px;justify-content:center;margin-bottom:12px;}
   .prog-dot{width:14px;height:14px;border-radius:50%;background:#E0E0E0;border:2px solid #BDBDBD;transition:all .3s;}
-  .prog-dot.done{background:#FFD54F;border-color:#FFB74D;box-shadow:0 0 8px rgba(255,180,77,.6);}
-  .prog-dot.cur{background:#66BB6A;border-color:#43A047;box-shadow:0 0 8px rgba(67,160,71,.6);}
-  .ch-label{font-size:.75rem;color:#8BC34A;margin-bottom:10px;font-weight:700;}
+  .prog-dot.done{background:#FFD54F;border-color:#FFB74D;box-shadow:0 0 8px rgba(255,180,77,.6);animation:dotPop .4s;}
+  .prog-dot.cur{background:#66BB6A;border-color:#43A047;box-shadow:0 0 8px rgba(67,160,71,.6);animation:dotPulse 1.2s infinite;}
+  @keyframes dotPop{50%{transform:scale(1.35);}}
+  @keyframes dotPulse{50%{transform:scale(1.2);}}
+  .ch-label{font-size:.75rem;color:#8BC34A;margin-bottom:10px;font-weight:700;animation:fadeIn .3s;}
+  @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+  /* 連擊 */
+  .streak-badge{
+    display:inline-block;background:linear-gradient(135deg,#FF6F00,#FF8F00);color:#fff;
+    font-size:.72rem;font-weight:800;border-radius:12px;padding:2px 12px;margin-bottom:8px;
+    box-shadow:0 3px 10px rgba(255,111,0,.35);animation:streakIn .35s cubic-bezier(.34,1.56,.64,1);
+  }
+  @keyframes streakIn{0%{transform:scale(0);}100%{transform:scale(1);}}
 
   /* 題目 */
   .q-box{
     background:linear-gradient(135deg,#FFF9C4,#FFF3E0);border:2px solid #FFB74D;
-    border-radius:16px;padding:16px 20px;margin-bottom:14px;
+    border-radius:16px;padding:16px 20px;margin-bottom:14px;animation:qIn .45s cubic-bezier(.34,1.56,.64,1);
   }
+  @keyframes qIn{0%{opacity:0;transform:translateX(-30px) scale(.9);}100%{opacity:1;transform:none;}}
   .q-text{font-size:1.8rem;font-weight:800;color:#E65100;line-height:1.4;}
   .q-hint{font-size:.75rem;color:#A1887F;margin-top:4px;}
 
@@ -40,9 +54,12 @@
   .block-btn{
     border:none;border-radius:14px;padding:12px 18px;font-size:1rem;font-weight:700;
     cursor:pointer;transition:all .15s;color:#fff;box-shadow:0 5px 12px rgba(0,0,0,.2);
+    position:relative;
   }
   .block-btn:hover{transform:translateY(-3px) scale(1.05);}
   .block-btn:active{transform:scale(.93);}
+  .block-btn.bounce{animation:blockBounce .4s;}
+  @keyframes blockBounce{30%{transform:scale(1.18);}60%{transform:scale(.95);}100%{transform:none;}}
   .block-btn.tens{background:linear-gradient(135deg,#8D6E63,#5D4037);width:56px;height:64px;}
   .block-btn.ones{background:linear-gradient(135deg,#FFB74D,#FB8C00);width:40px;height:40px;border-radius:50%;}
   .block-btn:disabled{opacity:.35;cursor:default;transform:none;}
@@ -50,18 +67,25 @@
   /* 答案區 */
   .ans-zone{
     background:#E8F5E9;border:2px dashed #81C784;border-radius:16px;
-    padding:12px 16px;margin-bottom:12px;min-height:64px;
+    padding:12px 16px;margin-bottom:12px;min-height:64px;transition:border-color .2s,background .2s;
   }
+  .ans-zone.flash-ok{border-color:#43A047;background:#C8E6C9;animation:zoneFlash .5s;}
+  .ans-zone.flash-no{border-color:#E53935;background:#FFCDD2;animation:zoneShake .4s;}
+  @keyframes zoneFlash{50%{box-shadow:0 0 24px rgba(67,160,71,.5);}}
+  @keyframes zoneShake{20%,60%{transform:translateX(-6px);}40%,80%{transform:translateX(6px);}}
   .ans-label{font-size:.75rem;color:#4CAF50;font-weight:700;margin-bottom:6px;}
   .ans-row{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;}
   .ans-chip{
     display:inline-flex;align-items:center;justify-content:center;
     border-radius:10px;font-weight:800;color:#fff;font-size:.95rem;
-    box-shadow:0 3px 8px rgba(0,0,0,.15);
+    box-shadow:0 3px 8px rgba(0,0,0,.15);animation:chipDrop .3s cubic-bezier(.34,1.56,.64,1);
   }
+  @keyframes chipDrop{0%{transform:translateY(-16px) scale(.5);opacity:0;}100%{transform:none;opacity:1;}}
   .ans-chip.tens{width:44px;height:52px;background:linear-gradient(135deg,#8D6E63,#5D4037);}
   .ans-chip.ones{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FFB74D,#FB8C00);}
-  .ans-num{font-size:1.6rem;font-weight:800;color:#2E7D32;margin-top:6px;}
+  .ans-num{font-size:1.6rem;font-weight:800;color:#2E7D32;margin-top:6px;transition:transform .15s;}
+  .ans-num.bump{animation:numBump .3s;}
+  @keyframes numBump{50%{transform:scale(1.2);}}
   .ans-empty{font-size:.85rem;color:#9E9E9E;padding:8px;}
 
   /* 按鈕列 */
@@ -79,20 +103,40 @@
   .btn:disabled{opacity:.4;cursor:default;transform:none;}
 
   /* 回饋 */
-  #feedback{display:none;margin-top:12px;padding:12px;border-radius:14px;font-size:.92rem;font-weight:600;line-height:1.6;}
-  #feedback.show{display:block;animation:pop .3s;}
-  #feedback.ok{background:#E8F5E9;color:#2E7D32;border:2px solid #A5D6A7;}
-  #feedback.no{background:#FFEBEE;color:#C62828;border:2px solid #EF9A9A;}
-  @keyframes pop{50%{transform:scale(1.03);}}
+  .feedback{margin-top:12px;padding:12px;border-radius:14px;font-size:.92rem;font-weight:600;line-height:1.6;animation:fbIn .35s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes fbIn{0%{opacity:0;transform:scale(.7);}100%{opacity:1;transform:scale(1);}}
+  .feedback.ok{background:#E8F5E9;color:#2E7D32;border:2px solid #A5D6A7;}
+  .feedback.no{background:#FFEBEE;color:#C62828;border:2px solid #EF9A9A;}
 
   /* 章節完成 / 通關 */
-  .big-emoji{font-size:3rem;margin-bottom:6px;}
-  .big-msg{font-size:1.2rem;font-weight:800;color:#2E7D32;margin-bottom:10px;}
-  .small-note{font-size:.82rem;color:#7CB342;line-height:1.7;margin-bottom:12px;}
+  .big-emoji{font-size:3rem;margin-bottom:6px;animation:emojiBounce .6s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes emojiBounce{0%{transform:scale(0) rotate(-20deg);}60%{transform:scale(1.25) rotate(8deg);}100%{transform:scale(1);}}
+  .big-msg{font-size:1.2rem;font-weight:800;color:#2E7D32;margin-bottom:10px;animation:fadeIn .5s .2s both;}
+  .small-note{font-size:.82rem;color:#7CB342;line-height:1.7;margin-bottom:12px;animation:fadeIn .5s .35s both;}
 
-  /* 3D 積木計數面板 */
-  .inv-row{display:flex;gap:10px;justify-content:center;font-size:.8rem;color:#5D4037;font-weight:700;margin-bottom:8px;}
-  .inv-item{background:#FFF9C4;border-radius:10px;padding:4px 12px;border:1.5px solid #FFE082;}
+  /* 逐字顯示的章節過場 */
+  .chapter-overlay{
+    position:fixed;top:0;left:0;width:100%;height:100%;z-index:2;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:rgba(46,125,50,.88);pointer-events:auto;animation:fadeIn .4s;
+  }
+  .chapter-overlay.ch-out{animation:fadeOut .5s forwards;}
+  @keyframes fadeOut{to{opacity:0;}}
+  .ch-overlay-title{font-size:1.8rem;font-weight:800;color:#FFF9C4;text-shadow:0 3px 12px rgba(0,0,0,.3);animation:chTitle .6s cubic-bezier(.34,1.56,.64,1);}
+  @keyframes chTitle{0%{transform:scale(0) translateY(-40px);}100%{transform:none;}}
+  .ch-overlay-sub{font-size:1rem;color:#C8E6C9;margin-top:8px;animation:fadeIn .5s .3s both;}
+
+  /* 音效開關 */
+  .sound-toggle{
+    position:fixed;top:14px;right:14px;z-index:3;
+    border:none;border-radius:50%;width:40px;height:40px;font-size:1.15rem;
+    background:rgba(255,255,255,.88);cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.2);
+    transition:transform .15s;
+  }
+  .sound-toggle:hover{transform:scale(1.1);}
+
+  /* 通關煙火 */
+  .confetti-dot{position:fixed;width:10px;height:10px;border-radius:3px;z-index:2;pointer-events:none;}
 
   @media(max-width:480px){
     .card{padding:16px 14px;border-radius:16px;}
@@ -106,6 +150,7 @@
 <body>
 <canvas id="bgCanvas"></canvas>
 <div id="ui"></div>
+<button class="sound-toggle" id="soundToggle" title="音效開關">🔊</button>
 
 <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -121,8 +166,66 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-/* ==================== Three.js 背景場景 ==================== */
-let scene,camera,renderer,controls,trees=[],sun;function initBG(){
+/* ============================================================
+   音效系統（Web Audio API，不需外部檔案）
+   ============================================================ */
+let audioCtx=null, soundOn=true;
+function getAudio(){
+  if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  return audioCtx;
+}
+function playTone(freq,duration,type='sine',volume=0.15,delay=0){
+  if(!soundOn) return;
+  try{
+    const ctx=getAudio();
+    const t=ctx.currentTime+delay;
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.type=type;
+    osc.frequency.setValueAtTime(freq,t);
+    gain.gain.setValueAtTime(0,t);
+    gain.gain.linearRampToValueAtTime(volume,t+0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001,t+duration);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t); osc.stop(t+duration);
+  }catch(e){}
+}
+const SFX={
+  click:()=>playTone(440,0.08,'sine',0.08),
+  tens:()=>{playTone(330,0.1,'triangle',0.1);playTone(220,0.15,'sine',0.06,0.03);},
+  ones:()=>playTone(660,0.08,'triangle',0.08),
+  borrow:()=>{playTone(200,0.12,'sawtooth',0.08);playTone(400,0.12,'sine',0.06,0.06);},
+  correct:()=>{
+    playTone(523,0.12,'sine',0.12);
+    playTone(659,0.12,'sine',0.12,0.08);
+    playTone(784,0.2,'sine',0.14,0.16);
+    playTone(1047,0.25,'sine',0.1,0.24);
+  },
+  wrong:()=>{
+    playTone(300,0.15,'sawtooth',0.07);
+    playTone(250,0.2,'sawtooth',0.06,0.08);
+  },
+  chapter:()=>{
+    [523,587,659,698,784,880,988,1047].forEach((f,i)=>playTone(f,0.3,'triangle',0.1,i*0.08));
+  },
+  win:()=>{
+    [523,659,784,1047,784,1047,1319].forEach((f,i)=>playTone(f,0.35,'sine',0.13,i*0.1));
+  },
+  clear:()=>playTone(150,0.2,'sine',0.05),
+};
+
+// 音效開關按鈕
+document.getElementById("soundToggle").addEventListener("click",function(){
+  soundOn=!soundOn;
+  this.textContent=soundOn?"🔊":"🔇";
+  if(soundOn) SFX.click();
+});
+
+/* ============================================================
+   Three.js 背景場景
+   ============================================================ */
+let scene,camera,renderer,controls,trees=[],sun,particles;
+function initBG(){
   scene=new THREE.Scene();
   scene.fog=new THREE.Fog(0xB5EAD7,30,90);
   camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,200);
@@ -137,7 +240,6 @@ let scene,camera,renderer,controls,trees=[],sun;function initBG(){
   controls.minDistance=15;controls.maxDistance=50;
   controls.autoRotate=true;controls.autoRotateSpeed=.4;
 
-  // 天空漸層
   scene.background=new THREE.Color(0x87CEEB);
   const hemi=new THREE.HemisphereLight(0xFFF3E0,0x8BC34A,.7);
   scene.add(hemi);
@@ -149,7 +251,6 @@ let scene,camera,renderer,controls,trees=[],sun;function initBG(){
   scene.add(dir);
   sun=dir;
 
-  // 地面
   const ground=new THREE.Mesh(
     new THREE.CircleGeometry(60,64),
     new THREE.MeshStandardMaterial({color:0x7CB342,roughness:.9})
@@ -157,7 +258,6 @@ let scene,camera,renderer,controls,trees=[],sun;function initBG(){
   ground.rotation.x=-Math.PI/2;ground.receiveShadow=true;
   scene.add(ground);
 
-  // 樹
   const trunkMat=new THREE.MeshStandardMaterial({color:0x6D4C41,roughness:.9});
   const leafMat=new THREE.MeshStandardMaterial({color:0x43A047,roughness:.7});
   for(let i=0;i<22;i++){
@@ -170,18 +270,17 @@ let scene,camera,renderer,controls,trees=[],sun;function initBG(){
     const leaves=new THREE.Mesh(new THREE.ConeGeometry(2.2*s,5*s,8),leafMat);
     leaves.position.set(x,6.5*s,z);leaves.castShadow=true;
     const group=new THREE.Group();group.add(trunk);group.add(leaves);
-    group.userData={baseX:x,baseZ:z,phase:Math.random()*Math.PI*2};
+    group.userData={phase:Math.random()*Math.PI*2,swaying:false};
     scene.add(group);trees.push(group);
   }
 
-  // 漂浮粒子（陽光）
   const pgeo=new THREE.BufferGeometry();
   const n=120,pts=new Float32Array(n*3);
   for(let i=0;i<n;i++){pts[i*3]=(Math.random()-.5)*60;pts[i*3+1]=Math.random()*20+3;pts[i*3+2]=(Math.random()-.5)*60;}
   pgeo.setAttribute("position",new THREE.BufferAttribute(pts,3));
   const pmat=new THREE.PointsMaterial({color:0xFFF176,size:.35,transparent:true,opacity:.8});
-  const particles=new THREE.Points(pgeo,pmat);
-  scene.add(particles);particles.userData={pts};
+  particles=new THREE.Points(pgeo,pmat);
+  scene.add(particles);
 
   addEventListener("resize",()=>{
     camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
@@ -197,94 +296,350 @@ function animate(t){
     tr.rotation.z=sw;
     tr.children[1].position.y=6.5*tr.children[1].geometry.parameters.height/5+.15*Math.sin(t*.002+tr.userData.phase);
   });
-  // 粒子漂移
-  scene.children.forEach(c=>{
-    if(c.isPoints){
-      const arr=c.geometry.attributes.position.array;
-      for(let i=1;i<arr.length;i+=3){
-        arr[i]+=Math.sin(t*.001+i)*.008;
-        if(arr[i]>25)arr[i]=3;
-      }
-      c.geometry.attributes.position.needsUpdate=true;
+  if(particles){
+    const arr=particles.geometry.attributes.position.array;
+    for(let i=1;i<arr.length;i+=3){
+      arr[i]+=Math.sin(t*.001+i)*.008;
+      if(arr[i]>25)arr[i]=3;
     }
-  });
+    particles.geometry.attributes.position.needsUpdate=true;
+  }
   renderer.render(scene,camera);
 }
 function celebrate(){
-  // 樹木搖晃 + 陽光變亮
-  sun.intensity=1.4;
+  sun.intensity=1.5;
   setTimeout(()=>sun.intensity=.8,1500);
   trees.forEach(tr=>{
-    const orig=tr.rotation.z;
+    tr.userData.swaying=true;
     let k=0;
     const iv=setInterval(()=>{
-      tr.rotation.z=Math.sin(k*.4)*.15;k++;
-      if(k>14){clearInterval(iv);tr.rotation.z=0;}
+      tr.rotation.z=Math.sin(k*.4)*.18;k++;
+      if(k>14){clearInterval(iv);tr.rotation.z=0;tr.userData.swaying=false;}
     },40);
   });
 }
+// 3D 煙火（通關用）
+function fireworks3D(){
+  const colors=[0xFF6F00,0xFFD54F,0x66BB6A,0x42A5F5,0xBA68C8];
+  const geo=new THREE.BufferGeometry();
+  const n=200,pts=new Float32Array(n*3),vels=[];
+  for(let i=0;i<n;i++){
+    pts[i*3]=0;pts[i*3+1]=2;pts[i*3+2]=0;
+    const a=Math.random()*Math.PI*2,e=Math.random()*Math.PI;
+    const sp=3+Math.random()*5;
+    vels.push([Math.cos(a)*Math.sin(e)*sp,Math.cos(e)*sp+3,Math.sin(a)*Math.sin(e)*sp]);
+  }
+  geo.setAttribute("position",new THREE.BufferAttribute(pts,3));
+  const mat=new THREE.PointsMaterial({color:colors[Math.floor(Math.random()*colors.length)],size:.5,transparent:true,opacity:1});
+  const fw=new THREE.Points(geo,mat);
+  scene.add(fw);
+  let life=0;
+  const iv=setInterval(()=>{
+    life+=16;
+    const arr=geo.attributes.position.array;
+    for(let i=0;i<n;i++){
+      arr[i*3]+=vels[i][0]*.016;
+      arr[i*3+1]+=vels[i][1]*.016;
+      arr[i*3+2]+=vels[i][2]*.016;
+      vels[i][1]-=9.8*.016;
+    }
+    mat.opacity=Math.max(0,1-life/2500);
+    geo.attributes.position.needsUpdate=true;
+    if(life>2600){clearInterval(iv);scene.remove(fw);geo.dispose();mat.dispose();}
+  },16);
+}
 
-/* ==================== 題目 ==================== */
+/* ============================================================
+   題目生成
+   ============================================================ */
 function genQ(ch){
-  // ch: 1-5，漸進難度
   const r=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
-  if(ch<=1){ // 兩位數減一位數
+  if(ch<=1){
     const a=r(20,89),b=r(3,9);
     return {a,b,ans:a-b,borrow:a%10<b};
   }
-  if(ch===2){ // 兩位數減兩位數
+  if(ch===2){
     let a,b;
     do{a=r(20,89);b=r(11,a-1);}while(a%10>=b%10);
     return {a,b,ans:a-b,borrow:true};
   }
-  if(ch===3){ // 三位數減兩位數
+  if(ch===3){
     let a,b;
     do{a=r(100,299);b=r(11,99);}while(a%100>=b);
     return {a,b,ans:a-b,borrow:true};
   }
-  if(ch===4){ // 三位數減三位數
+  if(ch===4){
     let a,b;
     do{a=r(200,599);b=r(100,a-1);}while(a%10>=b%10&&a%100<b%100+10);
     return {a,b,ans:a-b,borrow:true};
   }
-  // ch5: 大數字含連續借位
   let a,b;
   do{a=r(300,999);b=r(100,a-1);}while(a%10>=b%10);
   return {a,b,ans:a-b,borrow:true};
 }
-
 const CH_NAMES=["🌱 新芽之林","🌿 幼苗林地","🌲 成長森林","🌳 茂密林海","🌟 暖暖森林"];
 
-/* ==================== React UI ==================== */
+/* ============================================================
+   React Components
+   ============================================================ */
 const {useState,useEffect,useRef,useCallback}=React;
 const h=React.createElement;
 
+/* ---- 進度條 ---- */
+function ProgressBar({solved,total=15}){
+  const dots=[];
+  for(let i=0;i<total;i++){
+    const cls="prog-dot"+(i<solved?" done":"")+(i===solved?" cur":"");
+    dots.push(h("div",{key:i,className:cls}));
+  }
+  return h("div",{className:"prog-row"},...dots);
+}
+
+/* ---- 積木按鈕 ---- */
+function BlockButton({type,label,onClick,disabled}){
+  const [bounce,setBounce]=useState(false);
+  const handleClick=()=>{
+    if(disabled)return;
+    setBounce(true);
+    setTimeout(()=>setBounce(false),400);
+    if(type==="tens")SFX.tens();else SFX.ones();
+    onClick();
+  };
+  return h("button",{
+    className:"block-btn "+type+(bounce?" bounce":""),
+    onClick:handleClick,disabled,title:type==="tens"?"放一根十位柱（=10）":"放一顆一粒（=1）"
+  },label);
+}
+
+/* ---- 答案區 ---- */
+function AnswerZone({tens,ones,flash}){
+  const chips=[];
+  for(let i=0;i<Math.min(tens,12);i++)chips.push(h("div",{key:"t"+i,className:"ans-chip tens"},"10"));
+  if(tens>12)chips.push(h("span",{key:"tm",style:{fontSize:".75rem",color:"#5D4037",fontWeight:700}},`×${tens}`));
+  for(let i=0;i<Math.min(ones,12);i++)chips.push(h("div",{key:"o"+i,className:"ans-chip ones"},"1"));
+  if(ones>12)chips.push(h("span",{key:"om",style:{fontSize:".75rem",color:"#E65100",fontWeight:700}},`×${ones}`));
+  const total=tens*10+ones;
+  return h("div",{className:"ans-zone "+(flash||"")},
+    h("div",{className:"ans-label"},"我的答案"),
+    chips.length>0
+      ?h("div",{className:"ans-row"},...chips)
+      :h("div",{className:"ans-empty"},"點擊上方積木開始組答案"),
+    h("div",{className:"ans-num"},`= ${total}`)
+  );
+}
+
+/* ---- 回饋 ---- */
+function Feedback({fb}){
+  if(!fb)return null;
+  return h("div",{className:"feedback "+(fb.ok?"ok":"no")},fb.msg);
+}
+
+/* ---- 回主頁按鈕 ---- */
+function HomeButton({onHome}){
+  return h("div",{className:"btn-row",style:{marginTop:"12px"}},
+    h("button",{className:"btn home",onClick:()=>{
+      if(confirm("確定放棄這局回到主頁嗎？")){SFX.click();onHome();}
+    }},"🏠 回主頁")
+  );
+}
+
+/* ---- 首頁 ---- */
+function HomeScreen({onStart}){
+  return h("div",{className:"card"},
+    h("div",{className:"big-emoji"},"🌲🦊🐰🐻🌲"),
+    h("h1",null,"🌳 暖暖森林 3D"),
+    h("div",{className:"sub"},"用積木解開減法之謎，溫暖森林！"),
+    h("div",{className:"small-note"},
+      "拖曳你的視角（滑動螢幕）看看森林，然後開始答題！"),
+    h("div",{className:"btn-row"},
+      h("button",{className:"btn submit",onClick:()=>{SFX.click();onStart();}},"☀️ 開始冒險")
+    ),
+    h("div",{style:{textAlign:"left",fontSize:".78rem",color:"#5D4037",lineHeight:1.8,marginTop:"14px",background:"#FFF9C4",borderRadius:"12px",padding:"10px 14px"}},
+      h("b",{style:{color:"#E65100"}},"📋 玩法"),
+      h("br"),
+      "1️⃣ 畫面中央會出現減法題",
+      h("br"),
+      "2️⃣ 點擊「十」放十位柱（=10），點擊「一」放一粒（=1）",
+      h("br"),
+      "3️⃣ 不夠減時按「借位」，把一根十位柱拆成 10 顆一粒",
+      h("br"),
+      "4️⃣ 組出答案後按「送出」，5 章 × 3 題全部完成就通關！"
+    )
+  );
+}
+
+/* ---- 章節過場 ---- */
+function ChapterOverlay({ch,onDone}){
+  useEffect(()=>{
+    SFX.chapter();
+    const t1=setTimeout(()=>{
+      onDone();
+    },2200);
+    return ()=>clearTimeout(t1);
+  },[]);
+  return h("div",{className:"chapter-overlay",onClick:onDone},
+    h("div",{className:"ch-overlay-title"},CH_NAMES[ch-1]),
+    h("div",{className:"ch-overlay-sub"},"正在進入森林...")
+  );
+}
+
+/* ---- 章節完成 ---- */
+function ChapterDoneScreen({ch,solved,onNext,onHome}){
+  return h("div",{className:"card"},
+    h("div",{className:"big-emoji"},"🌿🎉"),
+    h("div",{className:"big-msg"},`第 ${ch} 章完成！`),
+    h("div",{className:"small-note"},
+      `完成「${CH_NAMES[ch-1]}」，繼續前進第 ${ch+1} 章！目前已答對 ${solved} 題。`),
+    h("div",{className:"btn-row"},
+      h("button",{className:"btn submit",onClick:()=>{SFX.click();onNext();}},`進入 ${CH_NAMES[ch]} →`)
+    ),
+    h(HomeButton,{onHome})
+  );
+}
+
+/* ---- 通關 ---- */
+function WinScreen({solved,onRestart,onHome}){
+  useEffect(()=>{SFX.win();fireworks3D();},[]);
+  return h("div",{className:"card"},
+    h("div",{className:"big-emoji"},"🌳🌟🦊🐰🐻🌟🌳"),
+    h("div",{className:"big-msg"},"🏆 森林完全復原！"),
+    h("div",{className:"small-note"},
+      "太厲害了！你完成全部 5 章 15 題，",
+      h("br"),
+      `森林變得好暖好暖，動物們都回來了！答對 ${solved} / 15 題。`),
+    h("div",{className:"btn-row"},
+      h("button",{className:"btn submit",onClick:()=>{SFX.click();onRestart();}},"🔄 再玩一次"),
+      h("button",{className:"btn home",onClick:()=>{SFX.click();onHome();}},"🏠 回主頁")
+    )
+  );
+}
+
+/* ---- 答題頁 ---- */
+function QuizScreen({ch,qi,q,solved,onAnswered,onNext,onHome}){
+  const [tens,setTens]=useState(0);
+  const [ones,setOnes]=useState(0);
+  const [fb,setFb]=useState(null);
+  const [flash,setFlash]=useState("");
+  const [showNext,setShowNext]=useState(false);
+  const [numBump,setNumBump]=useState(false);
+
+  const reset=()=>{setTens(0);setOnes(0);setFb(null);setFlash("");setShowNext(false);};
+  // 每次換題重置
+  useEffect(()=>{reset();},[q]);
+
+  const total=tens*10+ones;
+
+  const addTens=()=>{
+    if(tens>=30)return;
+    setTens(tens+1);setFb(null);setNumBump(true);
+    setTimeout(()=>setNumBump(false),300);
+  };
+  const addOnes=()=>{
+    if(total>=300)return;
+    setOnes(ones+1);setFb(null);setNumBump(true);
+    setTimeout(()=>setNumBump(false),300);
+  };
+  const doBorrow=()=>{
+    if(tens<=0)return;
+    setTens(tens-1);setOnes(ones+10);setFb(null);setFlash("");
+    SFX.borrow();
+  };
+  const clearAns=()=>{
+    setTens(0);setOnes(0);setFb(null);setFlash("");
+    SFX.clear();
+  };
+
+  const submit=()=>{
+    const val=tens*10+ones;
+    if(val===q.ans){
+      SFX.correct();
+      setFlash("flash-ok");
+      setFb({ok:true,msg:`答對了！☀️ ${q.a} − ${q.b} = ${q.ans}`});
+      setShowNext(true);
+      celebrate();
+      onAnswered(true);
+    }else{
+      SFX.wrong();
+      setFlash("flash-no");
+      const aT=Math.floor(q.ans/10),aO=q.ans%10;
+      setFb({ok:false,msg:
+        `答案應該是 ${q.ans}（${aT} 根十位柱 + ${aO} 顆一粒）。你組的是 ${val}。再試一次！`
+      });
+      setTimeout(()=>setFlash(""),500);
+      onAnswered(false);
+    }
+  };
+
+  const handleNext=()=>{
+    SFX.click();
+    onNext();
+  };
+
+  return h("div",{className:"card"},
+    h(ProgressBar,{solved}),
+    h("div",{className:"ch-label"},`${CH_NAMES[ch-1]}・第 ${qi+1} / 3 題`),
+    h("div",{className:"q-box"},
+      h("div",{className:"q-text"},`${q.a} − ${q.b} = ?`),
+      q.borrow
+        ?h("div",{className:"q-hint"},"💡 這題需要借位喔！")
+        :h("div",{className:"q-hint"},"直接計算即可")
+    ),
+    h("div",{className:"block-zone"},
+      h(BlockButton,{type:"tens",label:"十",onClick:addTens,disabled:tens>=30}),
+      h(BlockButton,{type:"ones",label:"一",onClick:addOnes,disabled:total>=300})
+    ),
+    h(AnswerZone,{tens,ones,flash}),
+    h("div",{className:"btn-row"},
+      h("button",{className:"btn borrow",onClick:doBorrow,disabled:tens===0},"🔄 借位"),
+      h("button",{className:"btn clear",onClick:clearAns,disabled:total===0},"🧹 清空"),
+      h("button",{className:"btn submit",onClick:submit,disabled:total===0},"✅ 送出")
+    ),
+    h(Feedback,{fb}),
+    showNext&&h("div",{style:{marginTop:"12px"}},
+      h("button",{className:"btn submit",onClick:handleNext},
+        qi<2?"下一題 →":"完成本章 🎉")
+    ),
+    h(HomeButton,{onHome})
+  );
+}
+
+/* ---- 主 App ---- */
 function App(){
-  const [phase,setPhase]=useState("home"); // home|play|chapterDone|win
+  const [phase,setPhase]=useState("home");
   const [ch,setCh]=useState(1);
   const [qi,setQi]=useState(0);
   const [q,setQ]=useState(null);
-  const [tens,setTens]=useState(0);   // 答案區十位柱數量
-  const [ones,setOnes]=useState(0);   // 答案區一粒數量
-  const [fb,setFb]=useState(null);    // {ok,msg}
-  const [showNext,setShowNext]=useState(false);
   const [solved,setSolved]=useState(0);
-  const animRef=useRef(null);
+  const [streak,setStreak]=useState(0);
+  const [bestStreak,setBestStreak]=useState(0);
+  const [showOverlay,setShowOverlay]=useState(false);
 
   const startGame=useCallback(()=>{
-    setCh(1);setQi(0);setSolved(0);
-    const nq=genQ(1);setQ(nq);
-    setTens(0);setOnes(0);setFb(null);setShowNext(false);
+    setCh(1);setQi(0);setSolved(0);setStreak(0);
+    setQ(genQ(1));
+    setShowOverlay(true);
+    setTimeout(()=>setShowOverlay(false),2200);
     setPhase("play");
   },[]);
 
-  const nextQ=useCallback(()=>{
-    setFb(null);setShowNext(false);
-    if(qi<2){
-      const nqi=qi+1;setQi(nqi);
-      setQ(genQ(ch));setTens(0);setOnes(0);
+  const goHome=useCallback(()=>{
+    setPhase("home");
+  },[]);
+
+  const handleAnswered=useCallback((correct)=>{
+    if(correct){
+      setSolved(s=>s+1);
+      setStreak(s=>{const ns=s+1;setBestStreak(b=>Math.max(b,ns));return ns;});
     }else{
-      // 章節完成
+      setStreak(0);
+    }
+  },[]);
+
+  const nextQ=useCallback(()=>{
+    if(qi<2){
+      setQi(qi+1);
+      setQ(genQ(ch));
+    }else{
       if(ch<5){
         setPhase("chapterDone");
       }else{
@@ -294,161 +649,29 @@ function App(){
   },[qi,ch]);
 
   const nextChapter=useCallback(()=>{
-    const nch=ch+1;setCh(nch);setQi(0);
-    setQ(genQ(nch));setTens(0);setOnes(0);
-    setFb(null);setPhase("play");
+    const nch=ch+1;
+    setCh(nch);setQi(0);
+    setQ(genQ(nch));
+    setShowOverlay(true);
+    setTimeout(()=>setShowOverlay(false),2200);
+    setPhase("play");
   },[ch]);
 
-  const addTens=()=>{ if(tens<30){setTens(tens+1);setFb(null);} };
-  const addOnes=()=>{ if(tens*10+ones<300){setOnes(ones+1);setFb(null);} };
-  const doBorrow=()=>{
-    if(tens>0){
-      setTens(tens-1);setOnes(ones+10);
-      setFb(null);
-    }
-  };
-  const clearAns=()=>{setTens(0);setOnes(0);setFb(null);};
-
-  const submit=()=>{
-    const val=tens*10+ones;
-    if(val===q.ans){
-      setSolved(solved+1);
-      setFb({ok:true,msg:`答對了！☀️ ${q.a} − ${q.b} = ${q.ans}`});
-      setShowNext(true);
-      celebrate();
-    }else{
-      // 顯示正解的積木分解
-      const aT=Math.floor(q.ans/10),aO=q.ans%10;
-      setFb({ok:false,msg:
-        `答案應該是 ${q.ans}（${aT} 根十位柱 + ${aO} 顆一粒）。`+
-        `你組的是 ${val}。再試一次！`
-      });
-    }
-  };
-
-  const totalVal=tens*10+ones;
-
-  /* ---- 首頁 ---- */
+  /* ---- 渲染 ---- */
+  let screen;
   if(phase==="home"){
-    return h("div",{className:"card"},
-      h("div",{className:"big-emoji"},"🌲🦊🐰🐻🌲"),
-      h("h1",null,"🌳 暖暖森林 3D"),
-      h("div",{className:"sub"},"用積木解開減法之謎，溫暖森林！"),
-      h("div",{className:"small-note"},
-        "拖曳你的視角（滑動螢幕）看看森林，","然後開始答題！"),
-      h("div",{className:"btn-row"},
-        h("button",{className:"btn submit",onClick:startGame},"☀️ 開始冒險")
-      ),
-      h("div",{className:"rules",style:{textAlign:"left",fontSize:".78rem",color:"#5D4037",lineHeight:1.8,marginTop:"14px",background:"#FFF9C4",borderRadius:"12px",padding:"10px 14px"}},
-        h("b",{style:{color:"#E65100"}},"📋 玩法"),
-        h("br"),
-        "1️⃣ 畫面中央會出現減法題","",
-        h("br"),
-        "2️⃣ 黫擊「十」放十位柱（=10），點擊「一」放一粒（=1）","",
-        h("br"),
-        "3️⃣ 不夠減時按「借位」，把一根十位柱拆成 10 顆一粒","",
-        h("br"),
-        "4️⃣ 組出答案後按「送出」，5 章 × 3 題全部完成就通關！"
-      )
-    );
+    screen=h(HomeScreen,{onStart:startGame});
+  }else if(phase==="play"){
+    screen=h(QuizScreen,{ch,qi,q,solved,onAnswered:handleAnswered,onNext:nextQ,onHome:goHome});
+  }else if(phase==="chapterDone"){
+    screen=h(ChapterDoneScreen,{ch,solved,onNext:nextChapter,onHome:goHome});
+  }else if(phase==="win"){
+    screen=h(WinScreen,{solved,onRestart:startGame,onHome:goHome});
   }
 
-  /* ---- 章節完成 ---- */
-  if(phase==="chapterDone"){
-    return h("div",{className:"card"},
-      h("div",{className:"big-emoji"},"🌿🎉"),
-      h("div",{className:"big-msg"},`第 ${ch} 章完成！`),
-      h("div",{className:"small-note"},
-        `完成「${CH_NAMES[ch-1]}」，繼續前進第 ${ch+1} 章！`,`目前已答對 ${solved} 題。`),
-      h("div",{className:"btn-row"},
-        h("button",{className:"btn submit",onClick:nextChapter},`進入 ${CH_NAMES[ch]} →`)
-      ),
-      h("div",{className:"btn-row",style:{marginTop:"10px"}},
-        h("button",{className:"btn home",onClick:()=>setPhase("home")},"🏠 回主頁")
-      )
-    );
-  }
-
-  /* ---- 通關 ---- */
-  if(phase==="win"){
-    return h("div",{className:"card"},
-      h("div",{className:"big-emoji"},"🌳🌟🦊🐰🐻🌟🌳"),
-      h("div",{className:"big-msg"},"🏆 森林完全復原！"),
-      h("div",{className:"small-note"},
-        `太厲害了！你完成全部 5 章 15 題，`,
-        h("br"),
-        `森林變得好暖好暖，動物們都回來了！`,`答對 ${solved} / 15 題。`),
-      h("div",{className:"btn-row"},
-        h("button",{className:"btn submit",onClick:startGame},"🔄 再玩一次"),
-        h("button",{className:"btn home",onClick:()=>setPhase("home")},"🏠 回主頁")
-      )
-    );
-  }
-
-  /* ---- 答題頁 ---- */
-  const maxTens=Math.floor(q?1000:100);
-  const dots=[];
-  for(let i=0;i<15;i++){
-    const done=i<solved;
-    const cur=i===solved;
-    dots.push(h("div",{key:i,className:"prog-dot"+(done?" done":"")+(cur?" cur":"")}));
-  }
-
-  // 答案區積木 chips
-  const chips=[];
-  for(let i=0;i<Math.min(tens,12);i++)chips.push(h("div",{key:"t"+i,className:"ans-chip tens"},"10"));
-  if(tens>12)chips.push(h("span",{key:"tm",style:{fontSize:".75rem",color:"#5D4037",fontWeight:700}},`×${tens}`));
-  for(let i=0;i<Math.min(ones,12);i++)chips.push(h("div",{key:"o"+i,className:"ans-chip ones"},"1"));
-  if(ones>12)chips.push(h("span",{key:"om",style:{fontSize:".75rem",color:"#E65100",fontWeight:700}},`×${ones}`));
-
-  return h("div",{className:"card"},
-    // 進度
-    h("div",{className:"prog-row"},...dots),
-    h("div",{className:"ch-label"},`${CH_NAMES[ch-1]}・第 ${qi+1} / 3 題`),
-
-    // 題目
-    h("div",{className:"q-box"},
-      h("div",{className:"q-text"},`${q.a} − ${q.b} = ?`),
-      q.borrow?h("div",{className:"q-hint"},"💡 這題需要借位喔！"):h("div",{className:"q-hint"},"直接計算即可")
-    ),
-
-    // 積木供應區
-    h("div",{className:"block-zone"},
-      h("button",{className:"block-btn tens",onClick:addTens,disabled:tens>=30,title:"放一根十位柱（=10）"},"十"),
-      h("button",{className:"block-btn ones",onClick:addOnes,disabled:totalVal>=300,title:"放一顆一粒（=1）"},"一")
-    ),
-
-    // 答案區
-    h("div",{className:"ans-zone"},
-      h("div",{className:"ans-label"},"我的答案"),
-      chips.length>0
-        ?h("div",{className:"ans-row"},...chips)
-        :h("div",{className:"ans-empty"},"點擊上方積木開始組答案"),
-      h("div",{className:"ans-num"},`= ${totalVal}`)
-    ),
-
-    // 操作按鈕
-    h("div",{className:"btn-row"},
-      h("button",{className:"btn borrow",onClick:doBorrow,disabled:tens===0},"🔄 借位"),
-      h("button",{className:"btn clear",onClick:clearAns,disabled:totalVal===0},"🧹 清空"),
-      h("button",{className:"btn submit",onClick:submit,disabled:totalVal===0},"✅ 送出")
-    ),
-
-    // 回饋
-    fb&&h("div",{id:"feedback",className:"show "+(fb.ok?"ok":"no")},fb.msg),
-
-    // 下一題
-    showNext&&h("div",{style:{marginTop:"12px"}},
-      h("button",{className:"btn submit",onClick:nextQ},
-        qi<2?"下一題 →":"完成本章 🎉")
-    ),
-
-    // 回主頁
-    h("div",{className:"btn-row",style:{marginTop:"12px"}},
-      h("button",{className:"btn home",onClick:()=>{
-        if(confirm("確定放棄這局回到主頁嗎？"))setPhase("home");
-      }},"🏠 回主頁")
-    )
+  return h(React.Fragment,null,
+    showOverlay&&h(ChapterOverlay,{ch,onDone:()=>setShowOverlay(false)}),
+    h("div",{key:phase+"-"+qi,style:{width:"100%",display:"flex",justifyContent:"center"}},screen)
   );
 }
 
